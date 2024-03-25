@@ -1,13 +1,15 @@
 const services = require('../services/eventsServices')
 
-const getAllEvents = (req,res) => {
+const getAllEvents = async (req,res) => {
     
-    services.getAllEvents((error, data) => {
-        if (error) {
-          return res.status(500).json({ error: 'Error interno del servidor' });
-        }
-        return res.status(200).json(data);
-      });
+    try{
+        const result = await services.getAllEvents();
+        res.json(result)
+    } catch (error){
+        res.status(500);
+        res.send(error.message)
+    }
+
 }
 
 const getEvent = (req,res) => {

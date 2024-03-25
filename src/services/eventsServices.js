@@ -1,13 +1,10 @@
-const db = require('../database/mysql')
+const { getConnection } = require('../database/mysql')
 
-const getAllEvents = (callback) => { 
+const getAllEvents = async () => { 
 
-    db.query('SELECT * FROM events', (error, results, fields) => {
-        if (error) {
-          return callback(error, null);
-        }
-        return callback(null, results);
-      });
+    const connection = await getConnection();
+    const result = await connection.query('SELECT * FROM events');
+    return result
 
 } 
 const getEvent = (eventId) => {
