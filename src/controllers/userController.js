@@ -41,7 +41,7 @@ const createUser = (req,res) => {
 
 const updateUser =  (req,res) => {
 
-    const response =  services.updateUser(req.params.userId, req.body)
+    services.updateUser(req.params.userId, req.body)
 
     res.send( { status: 'OK', data: req.body})
 }

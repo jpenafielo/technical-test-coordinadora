@@ -9,7 +9,7 @@ const getAllUsers = async() => {
 } 
 
 const getUser = async (userId) => {
-    // Acceso a datos para recuperar el usuario de la base de datos
+
     const connection = await getConnection();
     const result = await connection.query('SELECT * FROM users WHERE user_id = ?', [userId]);
     return result
@@ -21,14 +21,16 @@ const createUser = async (user) => {
     const connection = await getConnection();
     connection.query(sql, user)
     console.log("Usuario creado exitosamente USER:", user)
+
 } 
 
 const updateUser = async (userId, user) => { 
-    const sql = `UPDATE users SET ? WHERE user_id = ?`;
 
+    const sql = `UPDATE users SET ? WHERE user_id = ?`;
     const connection = await getConnection();
     connection.query(sql, [user, userId])
     console.log("Usuario actualizado exitosamente ID:", userId)
+
 } 
 const deleteUser =  async (userId) => { 
     const sql = `DELETE FROM users WHERE user_id = ?`;
