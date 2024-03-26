@@ -25,6 +25,33 @@ const getEvent = async (req,res) => {
 
 }
 
+const getNearLocations = async (req,res) => {
+
+  try{
+      const { lon, lat, range } = req.body
+      console.log(lon)
+      const result = await services.getNearLocations(lon, lat, range);
+      res.send( { status: 'OK', data: result})
+  } catch (error){
+      res.status(500);
+      res.send(error.message)
+  }
+}
+
+const getNearLocationsFromEvent = async (req,res) => {
+
+  try{
+      const { eventId, range } = req.body
+      const event = await services.getEvent(eventId)
+      const result = await services.getNearLocationsFromEvent(event[0].location, range);
+      res.send( { status: 'OK', data: result})
+  } catch (error){
+      res.status(500);
+      res.send(error.message)
+  }
+}
+
+
 const createEvent = (req,res) => {
 
     try {
@@ -38,6 +65,22 @@ const createEvent = (req,res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
       }
 
+}
+
+const massiveCreationEvents = async (req,res) => {
+  try {
+
+    if (!req.file) {
+      return res.status(400).send('No se ha enviado ningún archivo');
+    }
+
+    services.massiveCreationEvents(req.file.buffer)
+    res.status(200).send({Status: 'OK', Message: 'Archivo Excel procesado correctamente'});
+
+  } catch (e){
+    console.error('Error al procesar el archivo Excel:', error);
+    res.status(500).send('Error al procesar el archivo Excel');
+  }
 }
 
 const updateEvent = (req,res) => {
@@ -77,5 +120,8 @@ module.exports = {
     getEvent,
     createEvent,
     updateEvent,
-    deleteEvent
+    deleteEvent,
+    massiveCreationEvents,
+    getNearLocations,
+    getNearLocationsFromEvent
 }

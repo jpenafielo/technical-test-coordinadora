@@ -7,7 +7,7 @@ function verifyToken(req, res, next) {
       return res.status(401).json({ message: "Token not provied" });
     }
     try {
-      const payload = jwt.verify(token, process.env.TOKEN_SECRET);
+      const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
       req.username = payload.username;
       next();
     } catch (error) {

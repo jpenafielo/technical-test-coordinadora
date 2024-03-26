@@ -62,12 +62,12 @@ const login = async (user) => {
             const accessToken = jwt.sign({
                 name: user.name,
                 id: user._id
-            }, process.env.TOKEN_SECRET, {expiresIn: "60m" });
+            }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "60m" });
 
             const refreshToken = jwt.sign({
                 name: user.name,
                 id: user._id
-            }, process.env.TOKEN_SECRET);
+            }, process.env.REFRESH_TOKEN_SECRET);
             return {accessToken, refreshToken}
 
         } return "Contraseña incorrecta"
@@ -87,17 +87,18 @@ const login = async (user) => {
         return res.status(400).json({ message: "El token de refresco es requerido." });
       }
 
-      jwt.verify(refreshToken, process.env.TOKEN_SECRET, async (err, user) => {
+      jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
         if (err) {
           return res.status(403).json({ message: "Token de refresco inválido." });
         }
 
-        const accessToken = jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: "60m" });
+        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "60m" });
 
         return res.status(200).json({
           message: "Token de acceso refrescado.",
           accessToken,
         });
+        
       });
     } catch (error) {
       return res.status(500).json({ message: "Error al refrescar token de acceso. Por favor, inténtalo de nuevo más tarde." });
@@ -124,6 +125,7 @@ const deleteUser =  async (userId) => {
 module.exports = {
 
     getAllUsers,
+    getUserByEmail,
     getUser,
     registerUser,
     updateUser,
