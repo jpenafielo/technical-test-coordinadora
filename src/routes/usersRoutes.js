@@ -73,10 +73,10 @@ router.post("/", usersController.registerUser)
 /**
  * @swagger
  * /api/users/auth/login:
- * post:
+ *   post:
  *     security:
  *       - Bearer: []
- *     summary: Inicia sesion
+ *     summary: Logea a un usuario
  *     requestBody:
  *       required: true
  *       content:
@@ -86,15 +86,15 @@ router.post("/", usersController.registerUser)
  *             properties:
  *               email:
  *                 type: string
- *                 description: El correo del usuario
+ *                 description: El ID del usuario
  *               name:
  *                 type: string
  *                 format: date-time
- *                 description: El nombre del usuario
+ *                 description: La fecha de la asistencia
  *               password:
  *                 type: string
  *                 format: date-time
- *                 description: La contraseña del usuario
+ *                 description: La fecha de la asistencia
  *           example:
  *             email: "prueba@test.com"
  *             name: "prueba10" 

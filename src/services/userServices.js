@@ -32,9 +32,9 @@ const registerUser = async (user) => {
     const date = Date.now();
     const date_time = new Date(date)
 
-    const userExist = getUserByEmail(email);
+    const userExist = await getUserByEmail(email);
 
-    if (!userExist){
+    if (userExist.length === 0){
         const userRegistered = {
             email,
             password: await bcrypt.encrypt(password),
