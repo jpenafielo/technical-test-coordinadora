@@ -32,17 +32,24 @@ const registerUser = async (user) => {
     const date = Date.now();
     const date_time = new Date(date)
 
-    const userRegistered = {
-        email,
-        password: await bcrypt.encrypt(password),
-        name,
-        registration_date: date_time
-    }
+    const userExist = getUserByEmail(email);
 
-    const sql = `INSERT INTO users SET ?`;
-    const connection = await getConnection();
-    connection.query(sql, userRegistered)
-    return userRegistered
+    if (!userExist){
+        const userRegistered = {
+            email,
+            password: await bcrypt.encrypt(password),
+            name,
+            registration_date: date_time
+        }
+    
+        const sql = `INSERT INTO users SET ?`;
+        const connection = await getConnection();
+        connection.query(sql, userRegistered)
+        return userRegistered
+    }
+    return "El usuario ya existe"
+
+    
 
 } 
 
@@ -77,36 +84,6 @@ const login = async (user) => {
 
 } 
 
-
- const refreshToken = async (body) => {
-
-    try {
-      const { refreshToken } = body;
-
-      if (!refreshToken) {
-        return res.status(400).json({ message: "El token de refresco es requerido." });
-      }
-
-      jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
-        if (err) {
-          return res.status(403).json({ message: "Token de refresco inválido." });
-        }
-
-        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "60m" });
-
-        return res.status(200).json({
-          message: "Token de acceso refrescado.",
-          accessToken,
-        });
-        
-      });
-    } catch (error) {
-      return res.status(500).json({ message: "Error al refrescar token de acceso. Por favor, inténtalo de nuevo más tarde." });
-    }
-  }
-
-
-
 const updateUser = async (userId, user) => { 
 
     const sql = `UPDATE users SET ? WHERE user_id = ?`;
@@ -130,7 +107,6 @@ module.exports = {
     registerUser,
     updateUser,
     deleteUser,
-    login,
-    refreshToken
+    login
 
 } 

@@ -31,11 +31,6 @@ const registerUser = async (req,res) => {
     try {
         
         const userRegistered = await services.registerUser(req.body)
-
-        res.header('auth-token', token).json({
-            error: null,
-            data: {token}
-        })
         res.send( { status: 'OK', data: userRegistered})
 
       } catch (e) {
@@ -58,18 +53,6 @@ const login = async (req,res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
       }
     
-}
-
-const refreshToken = async (req,res) => {
-    try {
-        
-        const token = await services.refreshToken(req.body)
-        res.send( { status: 'OK', data: token})
-
-      } catch (e) {
-        console.log(e)
-        res.status(500).json({ error: 'Error interno del servidor' });
-      }
 }
 
 const updateUser =  (req,res) => {
@@ -97,6 +80,5 @@ module.exports = {
     registerUser,
     updateUser,
     deleteUser,
-    login,
-    refreshToken
+    login
 }
