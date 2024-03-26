@@ -86,9 +86,21 @@ const login = async (user) => {
 
 const updateUser = async (userId, user) => { 
 
+
+    const databaseUser = await getUserByEmail(user.email)
+
+    const userRegistered = {
+        user_id: userId,
+        email: user.email,
+        password: await bcrypt.encrypt(user.password),
+        name: user.name,
+        registration_date: databaseUser[0].registration_date
+    }
+
+
     const sql = `UPDATE users SET ? WHERE user_id = ?`;
     const connection = await getConnection();
-    connection.query(sql, [user, userId])
+    connection.query(sql, [userRegistered, userId])
     console.log("Usuario actualizado exitosamente ID:", userId)
 
 } 
