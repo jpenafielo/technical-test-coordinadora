@@ -1,5 +1,6 @@
 const { getConnection } = require('../database/mysql')
-
+const eventService = require("./eventsServices")
+const moment = require('moment');
 
 const getAllAssistance = async() => { 
 
@@ -37,9 +38,30 @@ const getUserAssistance = async (userId) => {
 
 const registerAssistance = async (assistance) => { 
 
+    const assistanceToRegister = {
+        event_id: assistance.eventId,
+        user_id: assistance.userId,
+        date: assistance.date
+    }
+
+    const event = (await eventService.getEvent(assistance.eventId))[0]
+
+    const eventToUpdate = {
+        event_id: event.event_id,
+        user_id: event.user_id,
+        name: event.name,
+        description: event.description,
+        created_date: event.created_date,
+        location: event.location,
+        assistance: event.assistance + 1 ,
+        date: event.date
+    }
+
+    eventService.updateEvent(event.event_id, eventToUpdate)
+    
     const sql = `INSERT INTO assistance SET ?`;
     const connection = await getConnection();
-    connection.query(sql, assistance)
+    connection.query(sql, assistanceToRegister)
     console.log("Asistencia registrada exitosamente Asistencia:", assistance)
 
 } 
@@ -59,6 +81,27 @@ const deleteAssistance =  async (assistanceId) => {
     console.log("Asistencia eliminada exitosamente, ID:", assistanceId)
 }
 
+
+const calculateDailyAssistance = async (events) => {
+
+    let dailyAssistance = {
+        'Sunday': 0,
+        'Monday': 0,
+        'Tuesday': 0,
+        'Wednesday': 0,
+        'Thursday': 0,
+        'Friday': 0,
+        'Saturday': 0
+    };
+
+    events.forEach(event => {
+        let day = moment(event.date).format('dddd');
+        dailyAssistance[day] += event.assistance;
+    });
+
+    return dailyAssistance
+}
+
 module.exports = {
 
     getAllAssistance,
@@ -67,6 +110,7 @@ module.exports = {
     getUserAssistance,
     registerAssistance,
     updateAssistance,
-    deleteAssistance
+    deleteAssistance,
+    calculateDailyAssistance
 
 } 

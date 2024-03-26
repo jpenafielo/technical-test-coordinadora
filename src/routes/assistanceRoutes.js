@@ -5,6 +5,7 @@ const authToken = require("../utils/authToken")
 
 router
     .get("/", authToken, assistanceController.getAllAssistance)
+    .get("/dailyAssistance", authToken, assistanceController.getDailyAssistance)
     .get("/:assistanceId", authToken, assistanceController.getAssistance)
     .get("/user/:userId", authToken, assistanceController.getUserAssistance)
     .get("/event/:eventId", authToken, assistanceController.getEventAssistance)

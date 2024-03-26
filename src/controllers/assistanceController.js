@@ -1,4 +1,5 @@
 const services = require('../services/assistanceServices')
+const eventServices = require("../services/eventsServices")
 
 const getAllAssistance = async (req,res) => {
     
@@ -55,8 +56,8 @@ const registerAssistance = (req,res) => {
 
     try {
 
-        const { assistance } = req.body
-        services.createEvent(assistance)
+        const assistance  = req.body
+        services.registerAssistance(assistance)
         res.send( { status: 'OK', data: assistance})
 
       } catch (e) {
@@ -72,7 +73,7 @@ const updateAssistance = (req,res) => {
 
         const { assistanceId } = req.params
         const { assistance } = req.body
-        services.updateEvent(assistanceId, assistance)
+        services.updateAssistance(assistanceId, assistance)
         res.send( { status: 'OK', data: assistance})
 
       } catch (e) {
@@ -87,7 +88,7 @@ const deleteAssistance = (req,res) => {
      try {
 
         const { assistanceId } = req.params
-        services.deleteEvent(assistanceId)
+        services.deleteAssistance(assistanceId)
         res.send( { status: 'OK', data: "Asistencia eliminada exitosamente"})
 
       } catch (e) {
@@ -97,6 +98,20 @@ const deleteAssistance = (req,res) => {
 
 }
 
+const getDailyAssistance = async (req,res) => {
+
+  try {
+    
+    const events = await eventServices.getAllEvents()
+    const results = await services.calculateDailyAssistance( events )
+    
+    res.send( { status: 'OK', data: results})
+
+  } catch (e) {
+    console.log(e)
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+}
 
 module.exports = {
   getAllAssistance,
@@ -105,6 +120,7 @@ module.exports = {
   getUserAssistance,
   registerAssistance,
   updateAssistance,
-  deleteAssistance
+  deleteAssistance,
+  getDailyAssistance
   
 }
