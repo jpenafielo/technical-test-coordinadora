@@ -77,6 +77,35 @@ const login = async (user) => {
 
 } 
 
+
+ const refreshToken = async (body) => {
+
+    try {
+      const { refreshToken } = body;
+
+      if (!refreshToken) {
+        return res.status(400).json({ message: "El token de refresco es requerido." });
+      }
+
+      jwt.verify(refreshToken, process.env.TOKEN_SECRET, async (err, user) => {
+        if (err) {
+          return res.status(403).json({ message: "Token de refresco inválido." });
+        }
+
+        const accessToken = jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: "60m" });
+
+        return res.status(200).json({
+          message: "Token de acceso refrescado.",
+          accessToken,
+        });
+      });
+    } catch (error) {
+      return res.status(500).json({ message: "Error al refrescar token de acceso. Por favor, inténtalo de nuevo más tarde." });
+    }
+  }
+
+
+
 const updateUser = async (userId, user) => { 
 
     const sql = `UPDATE users SET ? WHERE user_id = ?`;
@@ -99,6 +128,7 @@ module.exports = {
     registerUser,
     updateUser,
     deleteUser,
-    login
+    login,
+    refreshToken
 
 } 

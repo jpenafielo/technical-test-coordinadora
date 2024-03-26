@@ -60,6 +60,18 @@ const login = async (req,res) => {
     
 }
 
+const refreshToken = async (req,res) => {
+    try {
+        
+        const token = await services.refreshToken(req.body)
+        res.send( { status: 'OK', data: token})
+
+      } catch (e) {
+        console.log(e)
+        res.status(500).json({ error: 'Error interno del servidor' });
+      }
+}
+
 const updateUser =  (req,res) => {
 
     services.updateUser(req.params.userId, req.body)
@@ -85,5 +97,6 @@ module.exports = {
     registerUser,
     updateUser,
     deleteUser,
-    login
+    login,
+    refreshToken
 }
