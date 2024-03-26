@@ -52,13 +52,13 @@ const getUserAssistance = async (req,res) => {
 
 }
 
-const registerAssistance = (req,res) => {
+const registerAssistance = async (req,res) => {
 
     try {
 
         const assistance  = req.body
-        services.registerAssistance(assistance)
-        res.send( { status: 'OK', data: assistance})
+        const result = await services.registerAssistance(assistance)
+        res.send( { status: 'OK', data: result})
 
       } catch (e) {
         console.log(e)
@@ -72,7 +72,7 @@ const updateAssistance = (req,res) => {
     try {
 
         const { assistanceId } = req.params
-        const { assistance } = req.body
+        const  assistance  = req.body
         services.updateAssistance(assistanceId, assistance)
         res.send( { status: 'OK', data: assistance})
 

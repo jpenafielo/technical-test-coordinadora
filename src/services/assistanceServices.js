@@ -46,33 +46,44 @@ const registerAssistance = async (assistance) => {
 
     const event = (await eventService.getEvent(assistance.eventId))[0]
 
-    const eventToUpdate = {
-        event_id: event.event_id,
-        user_id: event.user_id,
-        name: event.name,
-        description: event.description,
-        created_date: event.created_date,
-        location: event.location,
-        assistance: event.assistance + 1 ,
-        date: event.date
-    }
-
-    eventService.updateEvent(event.event_id, eventToUpdate)
+    if (event){
+        const eventToUpdate = {
+            event_id: event.event_id,
+            user_id: event.user_id,
+            name: event.name,
+            description: event.description,
+            created_date: event.created_date,
+            location: event.location,
+            assistance: event.assistance + 1 ,
+            date: event.date
+        }
     
-    const sql = `INSERT INTO assistance SET ?`;
-    const connection = await getConnection();
-    connection.query(sql, assistanceToRegister)
-    console.log("Asistencia registrada exitosamente Asistencia:", assistance)
+        eventService.updateEvent(event.event_id, eventToUpdate)
+        
+        const sql = `INSERT INTO assistance SET ?`;
+        const connection = await getConnection();
+        connection.query(sql, assistanceToRegister)
+        return {message: "Asistencia registrada exitosamente Asistencia:", data: assistance}
+    }
+    else {
+        
+        return {message: "El evento no existe"}
+    }
+    
 
 } 
 
 const updateAssistance = async (assistanceId, assistance) => { 
 
+    const assistanceToRegister ={
+        event_id: assistance.eventId,
+        user_id: assistance.userId,
+        date: assistance.date
+    }
     const sql = `UPDATE assistance SET ? WHERE assistance_id = ?`;
     const connection = await getConnection();
-    connection.query(sql, [assistance, assistanceId])
+    connection.query(sql, [assistanceToRegister, assistanceId])
     console.log("Asistencia actualizada exitosamente ID:", assistanceId)
-
 } 
 const deleteAssistance =  async (assistanceId) => { 
     const sql = `DELETE FROM assistance WHERE assistance_id = ?`;

@@ -1,7 +1,9 @@
-const express = require("express")
-const eventsRouter = require('./routes/eventsRoutes') 
-const userRouter = require('./routes/usersRoutes') 
-const assistanceRouter = require('./routes/assistanceRoutes')
+const express = require("express");
+const eventsRouter = require('./routes/eventsRoutes');
+const userRouter = require('./routes/usersRoutes');
+const assistanceRouter = require('./routes/assistanceRoutes');
+const { swaggerDocs } = require('./swagger');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,5 +16,6 @@ app.use("/api/assistance", assistanceRouter)
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`)
+    swaggerDocs(app, PORT);
 });
 

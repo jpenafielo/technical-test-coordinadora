@@ -3,7 +3,16 @@ const router = express.Router();
 const usersController = require('../controllers/userController')
 const authToken = require("../utils/authToken")
 
-
+/**
+ * @openapi
+ * /api/assistance:
+ *   get:
+ *     tags:
+ *       - assistance
+ *     responses:
+ *       200:
+ *         description: OK
+ */
 router
     .get("/", authToken,  usersController.getAllUsers)
     .get("/:userId", authToken, usersController.getUser)
