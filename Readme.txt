@@ -10,3 +10,5 @@ Seguido de docker stack deploy -c docker-compose.yml technical-test.
 
 Es requerido tener una base de datos local con las tablas creadas. 
 
+Video de la ejecución del reto: https://www.youtube.com/watch?v=a03kJaUlXew
+
