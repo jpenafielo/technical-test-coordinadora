@@ -19,9 +19,25 @@ const getEvent = async (eventId) => {
 const createEvent = async (event) => { 
 
     const sql = `INSERT INTO events SET ?`;
+
+    const dateToday = Date.now();
+    const date_time = new Date(dateToday)
+    const user = await userServices.getUserByEmail(event.email);
+    const coordenates = await getCoordenates(event.location)
+
+    const eventToRegister = {
+        user_id: user[0].user_id,
+        name: event.name,
+        description: event.description,
+        created_date: date_time,
+        location: coordenates[0] + ',' + coordenates [1],
+        assistance: 0,
+        date: event.date
+    }
+
     const connection = await getConnection();
-    connection.query(sql, event)
-    console.log("Evento creado exitosamente Evento:", event)
+    connection.query(sql, eventToRegister)
+    console.log("Evento creado exitosamente Evento:", eventToRegister)
 
 } 
 
@@ -64,9 +80,25 @@ const massiveCreationEvents = async (file) => {
 
 const updateEvent = async (eventId, event) => { 
 
+
+    const dateToday = Date.now();
+    const date_time = new Date(dateToday)
+    const user = await userServices.getUserByEmail(event.email);
+    const coordenates = await getCoordenates(event.location)
+
+    const eventToRegister = {
+        user_id: user[0].user_id,
+        name: event.name,
+        description: event.description,
+        created_date: date_time,
+        location: coordenates[0] + ',' + coordenates [1],
+        assistance: 0,
+        date: event.date
+    }
+
     const sql = `UPDATE events SET ? WHERE event_id = ?`;
     const connection = await getConnection();
-    connection.query(sql, [event, eventId])
+    connection.query(sql, [eventToRegister, eventId])
     console.log("Evento actualizado exitosamente ID:", eventId)
 
 } 

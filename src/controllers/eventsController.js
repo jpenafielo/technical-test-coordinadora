@@ -29,7 +29,6 @@ const getNearLocations = async (req,res) => {
 
   try{
       const { lon, lat, range } = req.body
-      console.log(lon)
       const result = await services.getNearLocations(lon, lat, range);
       res.send( { status: 'OK', data: result})
   } catch (error){
@@ -56,7 +55,7 @@ const createEvent = (req,res) => {
 
     try {
 
-        const { event } = req.body
+        const event  = req.body
         services.createEvent(event)
         res.send( { status: 'OK', data: event})
 
@@ -88,7 +87,7 @@ const updateEvent = (req,res) => {
     try {
 
         const { eventId } = req.params
-        const { event } = req.body
+        const event  = req.body
         services.updateEvent(eventId, event)
         res.send( { status: 'OK', data: event})
 
@@ -105,7 +104,7 @@ const deleteEvent = (req,res) => {
 
         const { eventId } = req.params
         services.deleteEvent(eventId)
-        res.send( { status: 'OK', data: "Usuario eliminado exitosamente"})
+        res.send( { status: 'OK', data: "Evento eliminado exitosamente"})
 
       } catch (e) {
         console.log(e)
