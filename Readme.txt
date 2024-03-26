@@ -4,3 +4,9 @@ Para ejecutar esta api, primero debe ejecutar npm install para instalar todas la
 
 En la ruta /api/docs se encuentra toda la documentacion para los endpoints. 
 
+Para ejecutar el dockerfile, primero debe ejecutar el comando: docker build -t technical-test .
+
+Seguido de docker stack deploy -c docker-compose.yml technical-test.
+
+Es requerido tener una base de datos local con las tablas creadas. 
+
