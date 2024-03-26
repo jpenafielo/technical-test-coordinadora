@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const assistanceController = require('../controllers/assistanceController')
-
+const authToken = require("../utils/authToken")
 
 router
-    .get("/", assistanceController.getAllAssistance)
-    .get("/:assistanceId", assistanceController.getAssistance)
-    .get("/user/:userId", assistanceController.getUserAssistance)
-    .get("/event/:eventId", assistanceController.getEventAssistance)
-    .post("/", assistanceController.registerAssistance)
-    .put("/:assistanceId", assistanceController.updateAssistance)
-    .delete("/:assistanceId", assistanceController.deleteAssistance);
+    .get("/", authToken, assistanceController.getAllAssistance)
+    .get("/:assistanceId", authToken, assistanceController.getAssistance)
+    .get("/user/:userId", authToken, assistanceController.getUserAssistance)
+    .get("/event/:eventId", authToken, assistanceController.getEventAssistance)
+    .post("/", authToken, assistanceController.registerAssistance)
+    .put("/:assistanceId", authToken, assistanceController.updateAssistance)
+    .delete("/:assistanceId", authToken, assistanceController.deleteAssistance);
     
 module.exports = router;
