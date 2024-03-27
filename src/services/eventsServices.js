@@ -85,21 +85,43 @@ const updateEvent = async (eventId, event) => {
     const date_time = new Date(dateToday)
     const user = await userServices.getUserByEmail(event.email);
     const coordenates = await getCoordenates(event.location)
+    
+    if (event.user_id){
 
-    const eventToRegister = {
-        user_id: user[0].user_id,
-        name: event.name,
-        description: event.description,
-        created_date: date_time,
-        location: coordenates[0] + ',' + coordenates [1],
-        assistance: 0,
-        date: event.date
+        const eventToRegister = {
+            user_id: event.user_id,
+            name: event.name,
+            description: event.description,
+            created_date: date_time,
+            location: coordenates[0] + ',' + coordenates [1],
+            assistance: 0,
+            date: event.date
+        }
+
+        const sql = `UPDATE events SET ? WHERE event_id = ?`;
+        const connection = await getConnection();
+        connection.query(sql, [eventToRegister, eventId])
+        console.log("Evento actualizado exitosamente ID:", eventId)
+    } else {
+        const eventToRegister = {
+            user_id: user[0].user_id,
+            name: event.name,
+            description: event.description,
+            created_date: date_time,
+            location: coordenates[0] + ',' + coordenates [1],
+            assistance: 0,
+            date: event.date
+        }
+
+        const sql = `UPDATE events SET ? WHERE event_id = ?`;
+        const connection = await getConnection();
+        connection.query(sql, [eventToRegister, eventId])
+        console.log("Evento actualizado exitosamente ID:", eventId)
+
     }
+    
 
-    const sql = `UPDATE events SET ? WHERE event_id = ?`;
-    const connection = await getConnection();
-    connection.query(sql, [eventToRegister, eventId])
-    console.log("Evento actualizado exitosamente ID:", eventId)
+
 
 } 
 const deleteEvent =  async (eventId) => { 
